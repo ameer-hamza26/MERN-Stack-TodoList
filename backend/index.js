@@ -11,7 +11,9 @@ const MONGO_URI = process.env.MONGO_URI;
 
 // Middleware
 app.use(cors({
-  origin : "https://mern-stack-todo-list-nine.vercel.app"
+  origin: 'https://mern-stack-todo-list-nine.vercel.app', // Allow requests from your frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Allow cookies and credentials
 }));
 app.use(express.json());
 
