@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 import axios from "axios";
 import "./App.css";
 
@@ -13,7 +14,7 @@ function App() {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("https://mern-stack-todo-list-en2a.vercel.app//api/tasks");
+      const response = await axios.get(`${backendUrl}/api/data`);
       setTasks(response.data);
     } catch (err) {
       console.error("Error fetching tasks:", err);
@@ -23,7 +24,7 @@ function App() {
   const addTask = async () => {
     if (!newTask.trim()) return;
     try {
-      const response = await axios.post("https://mern-stack-todo-list-en2a.vercel.app//api/tasks", {
+      const response = await axios.post(`${backendUrl}/api/data`, {
         text: newTask,
       });
       setTasks([...tasks, response.data]);
@@ -36,7 +37,7 @@ function App() {
   const toggleTask = async (id) => {
     try {
       const task = tasks.find((task) => task._id === id);
-      const response = await axios.put(`https://mern-stack-todo-list-en2a.vercel.app//api/tasks/${id}`, {
+      const response = await axios.put(`${backendUrl}/api/data/${id}`, {
         completed: !task.completed,
       });
       setTasks(tasks.map((task) => (task._id === id ? response.data : task)));
@@ -47,7 +48,7 @@ function App() {
 
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`https://mern-stack-todo-list-en2a.vercel.app//api/tasks/${id}`);
+      await axios.delete(`${backendUrl}/api/data/${id}`);
       setTasks(tasks.filter((task) => task._id !== id));
     } catch (err) {
       console.error("Error deleting task:", err);
