@@ -18,8 +18,7 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
-app.get('/api/tasks', (req, res) => {
-  res.json([{ id: 1, task: 'Learn MERN Stack' }]);
+app.get('/api/tasks', taskRoutes)
 });
 
 // Connect to MongoDB
