@@ -11,15 +11,13 @@ const MONGO_URI = process.env.MONGO_URI;
 
 // Middleware
 app.use(cors({
-  origin: 'https://mern-stack-todo-list-nine.vercel.app'
+  origin: ['https://mern-stack-todo-list-nine.vercel.app',"http://localhost:5173"]
 }));
-
 
 app.use(express.json());
 
 // Routes
-app.get('/api/tasks', taskRoutes)
-});
+app.use('/api/tasks', taskRoutes);
 
 // Connect to MongoDB
 mongoose

@@ -6,19 +6,31 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Fetch tasks from the backend
   useEffect(() => {
-    
     fetchTasks();
   }, []);
 
   const fetchTasks = async () => {
     try {
+      setLoading(true);
+      setError(null);
       const response = await axios.get(`${backendUrl}/api/tasks`);
-      setTasks(response.data);
+      if (Array.isArray(response.data)) {
+        setTasks(response.data);
+      } else {
+        setTasks([]);
+        console.error("Received non-array response:", response.data);
+      }
     } catch (err) {
       console.error("Error fetching tasks:", err);
+      setError("Failed to fetch tasks. Please try again later.");
+      setTasks([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,13 +76,15 @@ function App() {
           type="text"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && addTask()} // Add this line
+          onKeyPress={(e) => e.key === "Enter" && addTask()}
           placeholder="Add a new task"
         />
         <button onClick={addTask}>Add Task</button>
       </div>
+      {loading && <p>Loading tasks...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <ul>
-        {tasks.map((task) => (
+        {Array.isArray(tasks) && tasks.map((task) => (
           <li key={task._id}>
             <span
               style={{
